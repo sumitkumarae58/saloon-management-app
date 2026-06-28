@@ -23,6 +23,6 @@ public class RegisterRequest {
 
     private String phone;
 
-    @NotBlank(message = "Role is required (e.g. CUSTOMER, SALON_OWNER)")
+    @NotBlank(message = "Role is required (e.g. ROLE_CUSTOMER, ROLE_SALON_OWNER)")
     private String role;
 }

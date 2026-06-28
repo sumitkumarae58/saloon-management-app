@@ -1,6 +1,7 @@
 package com.salonbooking.controller.admin;
 
-import com.salonbooking.entity.Salon;
+import com.salonbooking.dto.DtoMapper;
+import com.salonbooking.dto.SalonDto;
 import com.salonbooking.service.SalonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -23,8 +25,11 @@ public class AdminController {
 
     @GetMapping("/salons")
     @Operation(summary = "List all salons", description = "Fetch complete list of registered salons across the platform.")
-    public ResponseEntity<List<Salon>> getAllSalons() {
-        return ResponseEntity.ok(salonService.getAllActiveSalons());
+    public ResponseEntity<List<SalonDto>> getAllSalons() {
+        List<SalonDto> salons = salonService.getAllActiveSalons().stream()
+                .map(DtoMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(salons);
     }
 
     @PostMapping("/salons/{id}/suspend")

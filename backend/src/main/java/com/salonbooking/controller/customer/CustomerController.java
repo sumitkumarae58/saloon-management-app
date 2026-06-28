@@ -1,6 +1,6 @@
 package com.salonbooking.controller.customer;
 
-import com.salonbooking.dto.BookingRequest;
+import com.salonbooking.dto.*;
 import com.salonbooking.entity.Appointment;
 import com.salonbooking.entity.AvailabilitySlot;
 import com.salonbooking.entity.Barber;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -39,45 +40,58 @@ public class CustomerController {
 
     @GetMapping("/salons")
     @Operation(summary = "Search registered Salons", description = "Discovers active salons. Accepts matching search queries.")
-    public ResponseEntity<List<Salon>> searchSalons(@RequestParam(required = false) String query) {
-        return ResponseEntity.ok(salonService.searchSalons(query));
+    public ResponseEntity<List<SalonDto>> searchSalons(@RequestParam(required = false) String query) {
+        List<SalonDto> salons = salonService.searchSalons(query).stream()
+                .map(DtoMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(salons);
     }
 
     @GetMapping("/salons/{id}")
     @Operation(summary = "Get Salon details", description = "Fetch a salon profile including specifications, ratings, and locations.")
-    public ResponseEntity<Salon> getSalon(@PathVariable UUID id) {
-        return ResponseEntity.ok(salonService.getSalonById(id));
+    public ResponseEntity<SalonDto> getSalon(@PathVariable UUID id) {
+        Salon salon = salonService.getSalonById(id);
+        return ResponseEntity.ok(DtoMapper.toDto(salon));
     }
 
     @GetMapping("/salons/{id}/barbers")
     @Operation(summary = "Get Salon barbers", description = "Lists active stylists registered with a specific salon.")
-    public ResponseEntity<List<Barber>> getBarbers(@PathVariable UUID id) {
-        return ResponseEntity.ok(barberService.getBarbersBySalon(id));
+    public ResponseEntity<List<BarberDto>> getBarbers(@PathVariable UUID id) {
+        List<BarberDto> barbers = barberService.getBarbersBySalon(id).stream()
+                .map(DtoMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(barbers);
     }
 
     @GetMapping("/barbers/{barberId}/availability")
     @Operation(summary = "Get Stylist availability slots", description = "Lists unblocked booking intervals for a barber on a chosen day.")
-    public ResponseEntity<List<AvailabilitySlot>> getAvailability(
+    public ResponseEntity<List<AvailabilitySlotDto>> getAvailability(
             @PathVariable UUID barberId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return ResponseEntity.ok(barberService.getAvailableSlots(barberId, date));
+        List<AvailabilitySlotDto> slots = barberService.getAvailableSlots(barberId, date).stream()
+                .map(DtoMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(slots);
     }
 
     @PostMapping("/appointments")
     @Operation(summary = "Schedule Appointment", description = "Books and schedules an appointment block. Resolves user context from login session.")
-    public ResponseEntity<Appointment> bookAppointment(
+    public ResponseEntity<AppointmentDto> bookAppointment(
             @Valid @RequestBody BookingRequest request,
             Authentication authentication) {
         String customerEmail = authentication.getName(); // Securely resolved from active JWT context
         Appointment booking = appointmentService.bookAppointment(request, customerEmail);
-        return new ResponseEntity<>(booking, HttpStatus.CREATED);
+        return new ResponseEntity<>(DtoMapper.toDto(booking), HttpStatus.CREATED);
     }
 
     @GetMapping("/appointments")
     @Operation(summary = "My Appointments History", description = "Lists scheduled/historic bookings for the logged-in user.")
-    public ResponseEntity<List<Appointment>> getMyAppointments(Authentication authentication) {
+    public ResponseEntity<List<AppointmentDto>> getMyAppointments(Authentication authentication) {
         String customerEmail = authentication.getName();
-        return ResponseEntity.ok(appointmentService.getAppointmentsByCustomer(customerEmail));
+        List<AppointmentDto> appointments = appointmentService.getAppointmentsByCustomer(customerEmail).stream()
+                .map(DtoMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(appointments);
     }
 
     @PutMapping("/appointments/{id}/cancel")

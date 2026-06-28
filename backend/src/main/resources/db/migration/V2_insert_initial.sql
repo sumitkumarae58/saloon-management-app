@@ -4,21 +4,21 @@
 -- Insert sample users
 INSERT INTO users (email, password_hash, first_name, last_name, phone, role_id, is_active, is_blocked) VALUES
 -- Super Admin (password: superadmin123)
-('superadmin@salon.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Super', 'Admin', '0000000000', 1, true, false),
+('superadmin@salon.com', '$2a$12$41AnV04QBo2J9OPRLkbPoOUcxTy2nfbkBsql49PFPJbgMqiBjecBC', 'Super', 'Admin', '0000000000', 1, true, false),
 
 -- Salon Owners (password: password123)
-('owner1@salon.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'John', 'Smith', '9876543210', 2, true, false),
-('owner2@salon.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Sarah', 'Johnson', '9876543211', 2, true, false),
+('owner1@salon.com', '$2a$12$41AnV04QBo2J9OPRLkbPoOUcxTy2nfbkBsql49PFPJbgMqiBjecBC', 'John', 'Smith', '9876543210', 2, true, false),
+('owner2@salon.com', '$2a$12$41AnV04QBo2J9OPRLkbPoOUcxTy2nfbkBsql49PFPJbgMqiBjecBC', 'Sarah', 'Johnson', '9876543211', 2, true, false),
 
 -- Barbers (password: password123)
-('barber1@salon.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Mike', 'Wilson', '9876543212', 3, true, false),
-('barber2@salon.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'David', 'Brown', '9876543213', 3, true, false),
-('barber3@salon.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'James', 'Lee', '9876543214', 3, true, false),
+('barber1@salon.com', '$2a$12$41AnV04QBo2J9OPRLkbPoOUcxTy2nfbkBsql49PFPJbgMqiBjecBC', 'Mike', 'Wilson', '9876543212', 3, true, false),
+('barber2@salon.com', '$2a$12$41AnV04QBo2J9OPRLkbPoOUcxTy2nfbkBsql49PFPJbgMqiBjecBC', 'David', 'Brown', '9876543213', 3, true, false),
+('barber3@salon.com', '$2a$12$41AnV04QBo2J9OPRLkbPoOUcxTy2nfbkBsql49PFPJbgMqiBjecBC', 'James', 'Lee', '9876543214', 3, true, false),
 
 -- Customers (password: password123)
-('customer1@email.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Robert', 'Taylor', '9876543215', 4, true, false),
-('customer2@email.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Emily', 'Davis', '9876543216', 4, true, false),
-('customer3@email.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Michael', 'Miller', '9876543217', 4, true, false);
+('customer1@email.com', '$2a$12$41AnV04QBo2J9OPRLkbPoOUcxTy2nfbkBsql49PFPJbgMqiBjecBC', 'Robert', 'Taylor', '9876543215', 4, true, false),
+('customer2@email.com', '$2a$12$41AnV04QBo2J9OPRLkbPoOUcxTy2nfbkBsql49PFPJbgMqiBjecBC', 'Emily', 'Davis', '9876543216', 4, true, false),
+('customer3@email.com', '$2a$12$41AnV04QBo2J9OPRLkbPoOUcxTy2nfbkBsql49PFPJbgMqiBjecBC', 'Michael', 'Miller', '9876543217', 4, true, false);
 
 -- Insert sample salons
 INSERT INTO salons (owner_id, name, description, address, city, pincode, phone, email, is_active, is_suspended, rating, total_reviews) VALUES

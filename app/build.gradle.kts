@@ -47,7 +47,8 @@ android {
       signingConfig = signingConfigs.getByName("release")
     }
     debug {
-      signingConfig = signingConfigs.getByName("debugConfig")
+      // Change this line to use default signing or comment it out
+      // signingConfig = signingConfigs.getByName("debugConfig")
     }
   }
   compileOptions {
