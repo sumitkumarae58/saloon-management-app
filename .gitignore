@@ -3,6 +3,11 @@
 .kotlin
 /local.properties
 /.idea/caches
+/.idea/shelf
+/.idea
+/backend/.idea/shelf/
+/backend/target/
+/backend/.idea/
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
