@@ -165,6 +165,8 @@ fun MarketplaceLanding(viewModel: SalonViewModel) {
                             .testTag("salon_search_input"),
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = SlateDark,
+                            unfocusedTextColor = SlateDark,
                             focusedBorderColor = IndigoPrimary.copy(alpha = 0.3f),
                             unfocusedBorderColor = SlateBorder,
                             focusedContainerColor = SlateLight,
@@ -1418,13 +1420,25 @@ fun ContactDetailsStep(
 
         item {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                val textFieldColors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = SlateDark,
+                    unfocusedTextColor = SlateDark,
+                    focusedBorderColor = IndigoPrimary,
+                    unfocusedBorderColor = SlateBorder,
+                    focusedLabelColor = SlateDark,
+                    unfocusedLabelColor = SlateMedium,
+                    focusedContainerColor = PureWhite,
+                    unfocusedContainerColor = PureWhite
+                )
+
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
                     label = { Text("Full Name") },
-                    leadingIcon = { Icon(Icons.Outlined.Person, "Name") },
+                    leadingIcon = { Icon(Icons.Outlined.Person, "Name", tint = SlateMedium) },
                     modifier = Modifier.fillMaxWidth().testTag("input_customer_name"),
                     shape = RoundedCornerShape(10.dp),
+                    colors = textFieldColors,
                     singleLine = true
                 )
 
@@ -1432,10 +1446,11 @@ fun ContactDetailsStep(
                     value = email,
                     onValueChange = { email = it },
                     label = { Text("Email Address") },
-                    leadingIcon = { Icon(Icons.Outlined.Email, "Email") },
+                    leadingIcon = { Icon(Icons.Outlined.Email, "Email", tint = SlateMedium) },
                     modifier = Modifier.fillMaxWidth().testTag("input_customer_email"),
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    colors = textFieldColors,
                     singleLine = true
                 )
 
@@ -1443,10 +1458,11 @@ fun ContactDetailsStep(
                     value = phone,
                     onValueChange = { phone = it },
                     label = { Text("Phone Number") },
-                    leadingIcon = { Icon(Icons.Outlined.Phone, "Phone") },
+                    leadingIcon = { Icon(Icons.Outlined.Phone, "Phone", tint = SlateMedium) },
                     modifier = Modifier.fillMaxWidth().testTag("input_customer_phone"),
                     shape = RoundedCornerShape(10.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    colors = textFieldColors,
                     singleLine = true
                 )
 
@@ -1455,6 +1471,7 @@ fun ContactDetailsStep(
                     onValueChange = { notes = it },
                     label = { Text("Special Requests / Hair type notes") },
                     modifier = Modifier.fillMaxWidth().height(100.dp).testTag("input_customer_notes"),
+                    colors = textFieldColors,
                     shape = RoundedCornerShape(10.dp)
                 )
 
@@ -1632,6 +1649,8 @@ fun CustomerDashboardView(
                 modifier = Modifier.weight(1f).testTag("customer_email_filter"),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = SlateDark,
+                    unfocusedTextColor = SlateDark,
                     focusedBorderColor = IndigoPrimary.copy(alpha = 0.3f),
                     unfocusedBorderColor = SlateBorder,
                     focusedContainerColor = SlateLight,

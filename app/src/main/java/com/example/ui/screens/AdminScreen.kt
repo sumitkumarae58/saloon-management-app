@@ -215,10 +215,13 @@ fun AdminScreen(
                         Button(
                             onClick = {
                                 if (name.isNotBlank() && address.isNotBlank()) {
-                                    // Normally we would insert a salon via VM. For simplicity of the platform demo,
-                                    // we can add a new salon object inside our database easily. We will trigger the viewmodel.
-                                    // We didn't write an explicit addSalon inside viewmodel, let's just make sure it creates.
-                                    // We can easily call DB insertion or show the added status.
+                                    viewModel.addNewSalon(
+                                        name = name,
+                                        address = address,
+                                        phone = phone,
+                                        hours = hours,
+                                        description = description
+                                    )
                                     showAddDialog = false
                                     // Clear
                                     name = ""
@@ -240,11 +243,51 @@ fun AdminScreen(
                     title = { Text("Register New Salon Store") },
                     text = {
                         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                            OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Salon Name") }, modifier = Modifier.fillMaxWidth().testTag("add_salon_name"))
-                            OutlinedTextField(value = address, onValueChange = { address = it }, label = { Text("Street Address") }, modifier = Modifier.fillMaxWidth())
-                            OutlinedTextField(value = phone, onValueChange = { phone = it }, label = { Text("Contact Phone") }, modifier = Modifier.fillMaxWidth())
-                            OutlinedTextField(value = hours, onValueChange = { hours = it }, label = { Text("Opening Hours") }, modifier = Modifier.fillMaxWidth())
-                            OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("Storefront Description") }, modifier = Modifier.fillMaxWidth())
+                            val textFieldColors = OutlinedTextFieldDefaults.colors(
+                                focusedTextColor = SlateDark,
+                                unfocusedTextColor = SlateDark,
+                                focusedBorderColor = IndigoPrimary,
+                                unfocusedBorderColor = SlateBorder,
+                                focusedLabelColor = SlateDark,
+                                unfocusedLabelColor = SlateMedium,
+                                focusedContainerColor = PureWhite,
+                                unfocusedContainerColor = PureWhite
+                            )
+                            OutlinedTextField(
+                                value = name,
+                                onValueChange = { name = it },
+                                label = { Text("Salon Name") },
+                                modifier = Modifier.fillMaxWidth().testTag("add_salon_name"),
+                                colors = textFieldColors
+                            )
+                            OutlinedTextField(
+                                value = address,
+                                onValueChange = { address = it },
+                                label = { Text("Street Address") },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = textFieldColors
+                            )
+                            OutlinedTextField(
+                                value = phone,
+                                onValueChange = { phone = it },
+                                label = { Text("Contact Phone") },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = textFieldColors
+                            )
+                            OutlinedTextField(
+                                value = hours,
+                                onValueChange = { hours = it },
+                                label = { Text("Opening Hours") },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = textFieldColors
+                            )
+                            OutlinedTextField(
+                                value = description,
+                                onValueChange = { description = it },
+                                label = { Text("Storefront Description") },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = textFieldColors
+                            )
                         }
                     },
                     containerColor = PureWhite

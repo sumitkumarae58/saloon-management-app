@@ -472,10 +472,44 @@ fun OwnerServicesTab(
                 title = { Text("Add New Service") },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Service Name") }, modifier = Modifier.fillMaxWidth().testTag("add_service_name"))
-                        OutlinedTextField(value = price, onValueChange = { price = it }, label = { Text("Price ($)") }, modifier = Modifier.fillMaxWidth().testTag("add_service_price"))
-                        OutlinedTextField(value = duration, onValueChange = { duration = it }, label = { Text("Duration (mins)") }, modifier = Modifier.fillMaxWidth().testTag("add_service_duration"))
-                        OutlinedTextField(value = desc, onValueChange = { desc = it }, label = { Text("Description") }, modifier = Modifier.fillMaxWidth())
+                        val textFieldColors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = SlateDark,
+                            unfocusedTextColor = SlateDark,
+                            focusedBorderColor = IndigoPrimary,
+                            unfocusedBorderColor = SlateBorder,
+                            focusedLabelColor = SlateDark,
+                            unfocusedLabelColor = SlateMedium,
+                            focusedContainerColor = PureWhite,
+                            unfocusedContainerColor = PureWhite
+                        )
+                        OutlinedTextField(
+                            value = name,
+                            onValueChange = { name = it },
+                            label = { Text("Service Name") },
+                            modifier = Modifier.fillMaxWidth().testTag("add_service_name"),
+                            colors = textFieldColors
+                        )
+                        OutlinedTextField(
+                            value = price,
+                            onValueChange = { price = it },
+                            label = { Text("Price ($)") },
+                            modifier = Modifier.fillMaxWidth().testTag("add_service_price"),
+                            colors = textFieldColors
+                        )
+                        OutlinedTextField(
+                            value = duration,
+                            onValueChange = { duration = it },
+                            label = { Text("Duration (mins)") },
+                            modifier = Modifier.fillMaxWidth().testTag("add_service_duration"),
+                            colors = textFieldColors
+                        )
+                        OutlinedTextField(
+                            value = desc,
+                            onValueChange = { desc = it },
+                            label = { Text("Description") },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = textFieldColors
+                        )
 
                         Text("Category", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = SlateDark)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -616,9 +650,37 @@ fun OwnerStaffTab(
                 title = { Text("Add Stylist / Barber") },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Barber Full Name") }, modifier = Modifier.fillMaxWidth().testTag("add_staff_name"))
-                        OutlinedTextField(value = role, onValueChange = { role = it }, label = { Text("Role Title") }, modifier = Modifier.fillMaxWidth())
-                        OutlinedTextField(value = bio, onValueChange = { bio = it }, label = { Text("Brief Bio") }, modifier = Modifier.fillMaxWidth())
+                        val textFieldColors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = SlateDark,
+                            unfocusedTextColor = SlateDark,
+                            focusedBorderColor = IndigoPrimary,
+                            unfocusedBorderColor = SlateBorder,
+                            focusedLabelColor = SlateDark,
+                            unfocusedLabelColor = SlateMedium,
+                            focusedContainerColor = PureWhite,
+                            unfocusedContainerColor = PureWhite
+                        )
+                        OutlinedTextField(
+                            value = name,
+                            onValueChange = { name = it },
+                            label = { Text("Barber Full Name") },
+                            modifier = Modifier.fillMaxWidth().testTag("add_staff_name"),
+                            colors = textFieldColors
+                        )
+                        OutlinedTextField(
+                            value = role,
+                            onValueChange = { role = it },
+                            label = { Text("Role Title") },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = textFieldColors
+                        )
+                        OutlinedTextField(
+                            value = bio,
+                            onValueChange = { bio = it },
+                            label = { Text("Brief Bio") },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = textFieldColors
+                        )
                     }
                 },
                 containerColor = PureWhite

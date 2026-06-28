@@ -12,7 +12,8 @@ data class SalonEntity(
     val rating: Double,
     val imageResName: String,
     val phone: String,
-    val openingHours: String
+    val openingHours: String,
+    val backendUuid: String? = null
 )
 
 @Entity(tableName = "services")
@@ -23,7 +24,8 @@ data class ServiceEntity(
     val price: Double,
     val durationMinutes: Int,
     val description: String,
-    val category: String
+    val category: String,
+    val backendUuid: String? = null
 )
 
 @Entity(tableName = "staff")
@@ -34,7 +36,8 @@ data class StaffEntity(
     val role: String,
     val rating: Double,
     val bio: String,
-    val avatarResName: String
+    val avatarResName: String,
+    val backendUuid: String? = null
 )
 
 @Entity(tableName = "bookings")
@@ -54,5 +57,6 @@ data class BookingEntity(
     val timeSlot: String, // format: "HH:MM AM/PM"
     val status: String, // "Pending", "Confirmed", "Completed", "Cancelled"
     val notes: String = "",
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+    val backendUuid: String? = null
 )

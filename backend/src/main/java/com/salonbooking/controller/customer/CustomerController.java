@@ -5,6 +5,7 @@ import com.salonbooking.entity.Appointment;
 import com.salonbooking.entity.AvailabilitySlot;
 import com.salonbooking.entity.Barber;
 import com.salonbooking.entity.Salon;
+import com.salonbooking.repository.ServiceRepository;
 import com.salonbooking.service.AppointmentService;
 import com.salonbooking.service.BarberService;
 import com.salonbooking.service.SalonService;
@@ -30,12 +31,15 @@ public class CustomerController {
     private final SalonService salonService;
     private final BarberService barberService;
     private final AppointmentService appointmentService;
+    private final ServiceRepository serviceRepository;
 
     public CustomerController(SalonService salonService, BarberService barberService,
-                              AppointmentService appointmentService) {
+                              AppointmentService appointmentService,
+                              ServiceRepository serviceRepository) {
         this.salonService = salonService;
         this.barberService = barberService;
         this.appointmentService = appointmentService;
+        this.serviceRepository = serviceRepository;
     }
 
     @GetMapping("/salons")
@@ -51,7 +55,7 @@ public class CustomerController {
     @Operation(summary = "Get Salon details", description = "Fetch a salon profile including specifications, ratings, and locations.")
     public ResponseEntity<SalonDto> getSalon(@PathVariable UUID id) {
         Salon salon = salonService.getSalonById(id);
-        return ResponseEntity.ok(DtoMapper.toDto(salon));
+        return ResponseEntity.ok(DtoMapper::toDto(salon));
     }
 
     @GetMapping("/salons/{id}/barbers")
@@ -61,6 +65,15 @@ public class CustomerController {
                 .map(DtoMapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(barbers);
+    }
+
+    @GetMapping("/salons/{id}/services")
+    @Operation(summary = "Get Salon services", description = "Lists all services offered by a specific salon.")
+    public ResponseEntity<List<ServiceDto>> getServices(@PathVariable UUID id) {
+        List<ServiceDto> services = serviceRepository.findBySalonIdAndIsActiveTrue(id).stream()
+                .map(DtoMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(services);
     }
 
     @GetMapping("/barbers/{barberId}/availability")
@@ -81,7 +94,7 @@ public class CustomerController {
             Authentication authentication) {
         String customerEmail = authentication.getName(); // Securely resolved from active JWT context
         Appointment booking = appointmentService.bookAppointment(request, customerEmail);
-        return new ResponseEntity<>(DtoMapper.toDto(booking), HttpStatus.CREATED);
+        return new ResponseEntity<>(DtoMapper::toDto(booking), HttpStatus.CREATED);
     }
 
     @GetMapping("/appointments")

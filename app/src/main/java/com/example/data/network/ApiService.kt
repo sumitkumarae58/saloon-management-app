@@ -22,6 +22,9 @@ interface ApiService {
     @GET("api/customer/salons/{id}/barbers")
     suspend fun getBarbersBySalon(@Path("id") salonId: String): Response<List<NetworkBarber>>
 
+    @GET("api/customer/salons/{id}/services")
+    suspend fun getServicesBySalon(@Path("id") salonId: String): Response<List<NetworkService>>
+
     @GET("api/customer/barbers/{barberId}/availability")
     suspend fun getBarberAvailability(
         @Path("barberId") barberId: String,
@@ -36,4 +39,11 @@ interface ApiService {
 
     @PUT("api/customer/appointments/{id}/cancel")
     suspend fun cancelAppointment(@Path("id") appointmentId: String): Response<String>
+
+    // --- Owner Operations ---
+    @POST("api/owner/salon")
+    suspend fun createSalon(
+        @Body request: NetworkCreateSalonRequest,
+        @Query("ownerId") ownerId: String
+    ): Response<NetworkSalon>
 }

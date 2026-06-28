@@ -98,3 +98,26 @@ data class NetworkAppointment(
     @Json(name = "salon") val salon: NetworkSalon,
     @Json(name = "barber") val barber: NetworkBarber?
 )
+
+@JsonClass(generateAdapter = true)
+data class NetworkService(
+    @Json(name = "id") val id: String,
+    @Json(name = "salonId") val salonId: String,
+    @Json(name = "name") val name: String,
+    @Json(name = "description") val description: String?,
+    @Json(name = "durationMinutes") val durationMinutes: Int,
+    @Json(name = "price") val price: Double,
+    @Json(name = "category") val category: String
+)
+
+@JsonClass(generateAdapter = true)
+data class NetworkCreateSalonRequest(
+    @Json(name = "name") val name: String,
+    @Json(name = "description") val description: String?,
+    @Json(name = "address") val address: String,
+    @Json(name = "city") val city: String,
+    @Json(name = "pincode") val pincode: String,
+    @Json(name = "phone") val phone: String?,
+    @Json(name = "email") val email: String?
+)
+

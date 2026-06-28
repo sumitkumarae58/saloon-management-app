@@ -22,6 +22,34 @@ class SalonRepository(private val salonDao: SalonDao) {
 
     suspend fun getSalonById(id: Int): SalonEntity? = salonDao.getSalonById(id)
 
+    suspend fun insertSalon(salon: SalonEntity): Long {
+        return salonDao.insertSalon(salon)
+    }
+
+    suspend fun clearAllSalons() {
+        salonDao.deleteAllSalons()
+    }
+
+    suspend fun clearAllServices() {
+        salonDao.deleteAllServices()
+    }
+
+    suspend fun clearAllStaff() {
+        salonDao.deleteAllStaff()
+    }
+
+    suspend fun insertSalons(salons: List<SalonEntity>) {
+        salonDao.insertSalons(salons)
+    }
+
+    suspend fun insertServices(services: List<ServiceEntity>) {
+        salonDao.insertServices(services)
+    }
+
+    suspend fun insertStaffList(staffList: List<StaffEntity>) {
+        salonDao.insertStaffList(staffList)
+    }
+
     suspend fun bookAppointment(booking: BookingEntity): Long {
         return salonDao.insertBooking(booking)
     }
@@ -226,7 +254,7 @@ class SalonRepository(private val salonDao: SalonDao) {
                 avatarResName = "zane"
             )
         )
-        salonDao.insertStaffMembers(staff)
+        salonDao.insertStaffList(staff)
 
         // Fetch inserted staff members to map booking assignments
         val insertedStaff = allStaff.first()

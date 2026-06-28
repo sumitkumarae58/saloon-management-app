@@ -23,6 +23,9 @@ interface SalonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSalon(salon: SalonEntity): Long
 
+    @Query("DELETE FROM salons")
+    suspend fun deleteAllSalons()
+
     // --- Services ---
     @Query("SELECT * FROM services WHERE salonId = :salonId")
     fun getServicesBySalon(salonId: Int): Flow<List<ServiceEntity>>
@@ -36,6 +39,9 @@ interface SalonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertService(service: ServiceEntity): Long
 
+    @Query("DELETE FROM services")
+    suspend fun deleteAllServices()
+
     @Delete
     suspend fun deleteService(service: ServiceEntity)
 
@@ -47,10 +53,13 @@ interface SalonDao {
     fun getAllStaff(): Flow<List<StaffEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertStaffMembers(staff: List<StaffEntity>)
+    suspend fun insertStaffList(staff: List<StaffEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStaff(staff: StaffEntity): Long
+
+    @Query("DELETE FROM staff")
+    suspend fun deleteAllStaff()
 
     @Delete
     suspend fun deleteStaff(staff: StaffEntity)

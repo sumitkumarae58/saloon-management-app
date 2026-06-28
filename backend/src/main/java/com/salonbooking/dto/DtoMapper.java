@@ -74,4 +74,17 @@ public class DtoMapper {
                 .barber(toDto(app.getBarber()))
                 .build();
     }
+
+    public static ServiceDto toDto(com.salonbooking.entity.Service service) {
+        if (service == null) return null;
+        return ServiceDto.builder()
+                .id(service.getId())
+                .salonId(service.getSalon() != null ? service.getSalon().getId() : null)
+                .name(service.getName())
+                .description(service.getDescription())
+                .durationMinutes(service.getDurationMinutes())
+                .price(service.getPrice())
+                .category(service.getCategory() != null ? service.getCategory().getName() : "Uncategorized")
+                .build();
+    }
 }
