@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: salon-booking-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/salon_db
+    username: salon_user
+    password: salon_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+app:
+  jwt:
+    # A base64-encoded 256-bit secure key
+    secret: dGhlLXNhbG9uLWJvb2tpbmctc3lzdGVtLXByb2R1Y3Rpb24tZ3JhZGUtc2VjdXJlLWtleS13aXRoLWVub3VnaC1iaXRzLWZvci1zaWduaW5nLTI1Ng==
+    expiration-ms: 900000 # 15 minutes (15 * 60 * 1000)
+    refresh-expiration-ms: 604800000 # 7 days (7 * 24 * 60 * 60 * 1000)
+
+server:
+  port: 8080
+  error:
+    include-message: always
+
+logging:
+  level:
+    org.springframework.security: INFO
+    com.salonbooking: DEBUG
