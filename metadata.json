@@ -1,0 +1,6 @@
+{
+  "name": "Salon Luxe",
+  "description": "A premium production-grade salon and barber booking system with dynamic roles, calendar view, and beautiful analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
