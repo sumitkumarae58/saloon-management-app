@@ -135,6 +135,80 @@ fun AdminScreen(
                     }
                 }
 
+                // Dynamic Backend Base URL configuration
+                var backendUrlText by remember { 
+                    mutableStateOf(com.example.data.network.RetrofitClient.getSavedBaseUrl(viewModel.getApplication()))
+                }
+                var showSavedToast by remember { mutableStateOf(false) }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = SlateLight),
+                    border = BorderStroke(1.dp, SlateBorder)
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text(
+                            text = "Backend Connection Settings",
+                            color = SlateDark,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            OutlinedTextField(
+                                value = backendUrlText,
+                                onValueChange = { backendUrlText = it },
+                                label = { Text("Server Base URL", fontSize = 10.sp) },
+                                modifier = Modifier.weight(1f).height(48.dp).testTag("backend_url_input"),
+                                shape = RoundedCornerShape(8.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedTextColor = SlateDark,
+                                    unfocusedTextColor = SlateDark,
+                                    focusedBorderColor = IndigoPrimary,
+                                    unfocusedBorderColor = SlateBorder,
+                                    focusedLabelColor = SlateDark,
+                                    unfocusedLabelColor = SlateMedium,
+                                    focusedContainerColor = PureWhite,
+                                    unfocusedContainerColor = PureWhite
+                                ),
+                                singleLine = true
+                            )
+                            Button(
+                                onClick = {
+                                    com.example.data.network.RetrofitClient.saveBaseUrl(viewModel.getApplication(), backendUrlText)
+                                    showSavedToast = true
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = IndigoPrimary),
+                                shape = RoundedCornerShape(8.dp),
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                                modifier = Modifier.height(36.dp).testTag("backend_url_save_button")
+                            ) {
+                                Text("Save", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                        if (showSavedToast) {
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = "Base URL saved! Reconnecting on next action...",
+                                color = EmeraldConfirmed,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            LaunchedEffect(key1 = showSavedToast) {
+                                kotlinx.coroutines.delay(3000)
+                                showSavedToast = false
+                            }
+                        }
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Row(

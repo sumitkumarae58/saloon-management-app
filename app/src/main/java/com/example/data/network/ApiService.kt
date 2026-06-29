@@ -46,4 +46,22 @@ interface ApiService {
         @Body request: NetworkCreateSalonRequest,
         @Query("ownerId") ownerId: String
     ): Response<NetworkSalon>
+
+    @POST("api/owner/barbers/create")
+    suspend fun createBarber(
+        @Query("salonId") salonId: String,
+        @Query("fullName") fullName: String,
+        @Query("specialization") specialization: String,
+        @Query("experienceYears") experienceYears: Int
+    ): Response<NetworkBarber>
+
+    @POST("api/owner/services")
+    suspend fun createService(
+        @Query("salonId") salonId: String,
+        @Query("name") name: String,
+        @Query("description") description: String,
+        @Query("durationMinutes") durationMinutes: Int,
+        @Query("price") price: Double,
+        @Query("categoryName") categoryName: String
+    ): Response<NetworkService>
 }

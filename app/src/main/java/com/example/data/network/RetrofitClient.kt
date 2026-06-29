@@ -10,9 +10,28 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    // "10.0.2.2" is the standard Android emulator loopback IP to communicate with localhost on your computer.
-    // In production, swap this with your live hosted URL.
-    private const val BASE_URL = "http://10.0.2.2:8080/"
+    @Volatile
+    var applicationContext: android.content.Context? = null
+
+    private var lastUsedBaseUrl: String = "http://10.0.2.2:8080/"
+    private var apiServiceInstance: ApiService? = null
+
+    fun getSavedBaseUrl(context: android.content.Context?): String {
+        val ctx = context ?: applicationContext
+        if (ctx == null) return lastUsedBaseUrl
+        val prefs = ctx.getSharedPreferences("salon_network_prefs", android.content.Context.MODE_PRIVATE)
+        return prefs.getString("backend_url", "http://10.0.2.2:8080/") ?: "http://10.0.2.2:8080/"
+    }
+
+    fun saveBaseUrl(context: android.content.Context, newUrl: String) {
+        val formattedUrl = if (newUrl.endsWith("/")) newUrl else "$newUrl/"
+        context.getSharedPreferences("salon_network_prefs", android.content.Context.MODE_PRIVATE)
+            .edit()
+            .putString("backend_url", formattedUrl)
+            .apply()
+        // Force rebuild on next request
+        apiServiceInstance = null
+    }
 
     private var authToken: String? = null
 
@@ -49,12 +68,18 @@ object RetrofitClient {
         }
         .build()
 
-    val apiService: ApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
-            .create(ApiService::class.java)
-    }
+    val apiService: ApiService
+        get() {
+            val currentUrl = getSavedBaseUrl(applicationContext)
+            if (apiServiceInstance == null || lastUsedBaseUrl != currentUrl) {
+                lastUsedBaseUrl = currentUrl
+                apiServiceInstance = Retrofit.Builder()
+                    .baseUrl(currentUrl)
+                    .client(okHttpClient)
+                    .addConverterFactory(MoshiConverterFactory.create(moshi))
+                    .build()
+                    .create(ApiService::class.java)
+            }
+            return apiServiceInstance!!
+        }
 }

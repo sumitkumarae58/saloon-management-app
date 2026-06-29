@@ -16,7 +16,7 @@ import com.example.data.model.StaffEntity
         StaffEntity::class,
         BookingEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class SalonDatabase : RoomDatabase() {
