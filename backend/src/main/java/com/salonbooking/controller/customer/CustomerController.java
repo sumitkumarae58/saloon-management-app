@@ -55,7 +55,7 @@ public class CustomerController {
     @Operation(summary = "Get Salon details", description = "Fetch a salon profile including specifications, ratings, and locations.")
     public ResponseEntity<SalonDto> getSalon(@PathVariable UUID id) {
         Salon salon = salonService.getSalonById(id);
-        return ResponseEntity.ok(DtoMapper::toDto(salon));
+        return ResponseEntity.ok(DtoMapper.toDto(salon));
     }
 
     @GetMapping("/salons/{id}/barbers")
@@ -94,7 +94,7 @@ public class CustomerController {
             Authentication authentication) {
         String customerEmail = authentication.getName(); // Securely resolved from active JWT context
         Appointment booking = appointmentService.bookAppointment(request, customerEmail);
-        return new ResponseEntity<>(DtoMapper::toDto(booking), HttpStatus.CREATED);
+        return new ResponseEntity<>(DtoMapper.toDto(booking), HttpStatus.CREATED);
     }
 
     @GetMapping("/appointments")

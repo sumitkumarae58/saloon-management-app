@@ -46,17 +46,17 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
                     val token = loginResponse.body()!!.accessToken
                     RetrofitClient.setAuthToken(token)
                     android.util.Log.d("SalonNetwork", "Successfully connected to Spring Boot backend! Authenticated as customer1@email.com.")
-                    
+
                     val salonsResponse = RetrofitClient.apiService.getSalons(null)
                     if (salonsResponse.isSuccessful && salonsResponse.body() != null) {
                         val salonsList = salonsResponse.body()!!
                         android.util.Log.d("SalonNetwork", "Retrieved ${salonsList.size} salons from backend. Starting database synchronization...")
-                        
+
                         // Clear existing mock/seeded local database entries so we load fresh data from your PostgreSQL backend
                         repository.clearAllSalons()
                         repository.clearAllServices()
                         repository.clearAllStaff()
-                        
+
                         for (netSalon in salonsList) {
                             val salonEntity = SalonEntity(
                                 name = netSalon.name,
@@ -70,7 +70,7 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
                             )
                             val localSalonId = repository.insertSalon(salonEntity).toInt()
                             android.util.Log.d("SalonNetwork", "Synced salon to local DB: ${netSalon.name} (Local ID: $localSalonId, Backend UUID: ${netSalon.id})")
-                            
+
                             // 1. Fetch and Sync barbers for this salon from backend
                             val barbersResponse = RetrofitClient.apiService.getBarbersBySalon(netSalon.id)
                             if (barbersResponse.isSuccessful && barbersResponse.body() != null) {
@@ -89,7 +89,7 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
                                 }
                                 android.util.Log.d("SalonNetwork", "Synced ${barbersList.size} barbers for ${netSalon.name}")
                             }
-                            
+
                             // 2. Fetch and Sync services for this salon from backend
                             val servicesResponse = RetrofitClient.apiService.getServicesBySalon(netSalon.id)
                             if (servicesResponse.isSuccessful && servicesResponse.body() != null) {
@@ -281,10 +281,10 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
             val timeParts = timePart.split(":")
             var hour = timeParts[0].toInt()
             val minute = timeParts[1]
-            
+
             if (amPm == "PM" && hour < 12) hour += 12
             if (amPm == "AM" && hour == 12) hour = 0
-            
+
             return String.format("%02d:%s:00", hour, minute)
         } catch (e: Exception) {
             return "10:00:00"
@@ -321,7 +321,7 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 val loginEmail = if (email.contains("@")) email else "customer1@email.com"
                 android.util.Log.d("SalonNetwork", "Syncing booking to backend for $loginEmail...")
-                
+
                 // 1. Authenticate user
                 val loginResponse = RetrofitClient.apiService.login(
                     NetworkLoginRequest(loginEmail, "password123")
@@ -357,12 +357,12 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
                         android.util.Log.e("SalonNetwork", "Failed to register user: ${registerResponse.errorBody()?.string()}")
                     }
                 }
-                
+
                 // 2. Resolve backend IDs directly from synchronized database entities
                 val finalSalonId = salon.backendUuid ?: "00000000-0000-0000-0000-000000000001"
                 val finalServiceId = service.backendUuid ?: "11111111-1111-1111-1111-111111111111"
                 val finalBarberId = staff?.backendUuid
-                
+
                 val bookingRequest = NetworkBookingRequest(
                     salonId = finalSalonId,
                     barberId = finalBarberId,
@@ -371,7 +371,7 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
                     startTime = convertTimeFormatTo24h(_bookingTime.value ?: "10:00 AM"),
                     notes = notes
                 )
-                
+
                 android.util.Log.d("SalonNetwork", "Sending booking request to backend: $bookingRequest")
                 val response = RetrofitClient.apiService.createAppointment(bookingRequest)
                 if (response.isSuccessful) {
@@ -475,46 +475,6 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
 
     fun addNewSalon(name: String, address: String, phone: String, hours: String, description: String) {
         viewModelScope.launch {
-            var backendUuid: String? = null
-            
-            // --- Sync with backend ---
-            try {
-                android.util.Log.d("SalonNetwork", "Logging in as owner to create new salon...")
-                val loginResponse = com.example.data.network.RetrofitClient.apiService.login(
-                    com.example.data.network.NetworkLoginRequest("owner1@salon.com", "password123")
-                )
-                if (loginResponse.isSuccessful && loginResponse.body() != null) {
-                    val loginBody = loginResponse.body()!!
-                    com.example.data.network.RetrofitClient.setAuthToken(loginBody.accessToken)
-                    val ownerId = loginBody.userId
-                    android.util.Log.d("SalonNetwork", "Owner login successful! Owner ID: $ownerId")
-                    
-                    val createRequest = com.example.data.network.NetworkCreateSalonRequest(
-                        name = name,
-                        description = description,
-                        address = address,
-                        city = "New York", // Default city
-                        pincode = "10001", // Default pincode
-                        phone = phone,
-                        email = "contact@${name.lowercase().replace(" ", "")}.com"
-                    )
-                    
-                    android.util.Log.d("SalonNetwork", "Sending create salon request to backend: $createRequest")
-                    val createResponse = com.example.data.network.RetrofitClient.apiService.createSalon(createRequest, ownerId)
-                    if (createResponse.isSuccessful && createResponse.body() != null) {
-                        backendUuid = createResponse.body()!!.id
-                        android.util.Log.i("SalonNetwork", "Successfully saved new salon on backend! UUID: $backendUuid")
-                    } else {
-                        android.util.Log.e("SalonNetwork", "Backend rejected salon creation: ${createResponse.errorBody()?.string()}")
-                    }
-                } else {
-                    android.util.Log.e("SalonNetwork", "Failed to login as owner: ${loginResponse.errorBody()?.string()}")
-                }
-            } catch (e: Exception) {
-                android.util.Log.e("SalonNetwork", "Failed to sync new salon to backend: ${e.message}")
-            }
-            
-            // --- Save in local room DB ---
             val newSalon = SalonEntity(
                 name = name,
                 address = address,
@@ -522,8 +482,7 @@ class SalonViewModel(application: Application) : AndroidViewModel(application) {
                 openingHours = hours,
                 description = description,
                 rating = 4.5,
-                imageResName = "img_salon_hero",
-                backendUuid = backendUuid
+                imageResName = "img_salon_hero"
             )
             repository.insertSalon(newSalon)
             android.util.Log.i("SalonNetwork", "Added new salon to local Room database: $name")

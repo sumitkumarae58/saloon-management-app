@@ -37,7 +37,7 @@ public class OwnerController {
     @Operation(summary = "Register a new Salon profile", description = "Creates a brand new salon establishment.")
     public ResponseEntity<SalonDto> createSalon(@RequestBody Salon salon, @RequestParam UUID ownerId) {
         Salon created = salonService.createSalon(salon, ownerId);
-        return new ResponseEntity<>(DtoMapper::toDto(created), HttpStatus.CREATED);
+        return new ResponseEntity<>(DtoMapper.toDto(created), HttpStatus.CREATED);
     }
 
     @PostMapping("/barbers")
@@ -48,7 +48,7 @@ public class OwnerController {
             @RequestParam String specialization,
             @RequestParam Integer experienceYears) {
         Barber barber = barberService.registerBarber(salonId, userId, specialization, experienceYears);
-        return new ResponseEntity<>(DtoMapper::toDto(barber), HttpStatus.CREATED);
+        return new ResponseEntity<>(DtoMapper.toDto(barber), HttpStatus.CREATED);
     }
 
     @GetMapping("/appointments")
