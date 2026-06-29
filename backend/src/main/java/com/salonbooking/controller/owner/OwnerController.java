@@ -56,7 +56,7 @@ public class OwnerController {
     @Operation(summary = "Register a new Salon profile", description = "Creates a brand new salon establishment.")
     public ResponseEntity<SalonDto> createSalon(@RequestBody Salon salon, @RequestParam UUID ownerId) {
         Salon created = salonService.createSalon(salon, ownerId);
-        return new ResponseEntity<>(DtoMapper::toDto(created), HttpStatus.CREATED);
+        return new ResponseEntity<>(DtoMapper.toDto(created), HttpStatus.CREATED);
     }
 
     @PostMapping("/barbers")
@@ -67,7 +67,7 @@ public class OwnerController {
             @RequestParam String specialization,
             @RequestParam Integer experienceYears) {
         Barber barber = barberService.registerBarber(salonId, userId, specialization, experienceYears);
-        return new ResponseEntity<>(DtoMapper::toDto(barber), HttpStatus.CREATED);
+        return new ResponseEntity<>(DtoMapper.toDto(barber), HttpStatus.CREATED);
     }
 
     @PostMapping("/barbers/create")
@@ -78,9 +78,9 @@ public class OwnerController {
             @RequestParam String specialization,
             @RequestParam Integer experienceYears) {
         String email = fullName.toLowerCase().replaceAll("\\s+", "") + "@salon.com";
-        User user = userRepository.findByEmail(email).orElseGet(() -> {
+        User user = userRepository.findByEmailActive(email).orElseGet(() -> {
             Role barberRole = roleRepository.findByName("ROLE_BARBER")
-                .orElseGet(() -> roleRepository.save(new Role(null, "ROLE_BARBER")));
+                .orElseGet(() -> roleRepository.save(new Role(null, "ROLE_BARBER", "Barber")));
             
             String[] parts = fullName.split(" ");
             String first = parts[0];
@@ -98,7 +98,7 @@ public class OwnerController {
         });
 
         Barber barber = barberService.registerBarber(salonId, user.getId(), specialization, experienceYears);
-        return new ResponseEntity<>(DtoMapper::toDto(barber), HttpStatus.CREATED);
+        return new ResponseEntity<>(DtoMapper.toDto(barber), HttpStatus.CREATED);
     }
 
     @PostMapping("/services")
@@ -131,7 +131,7 @@ public class OwnerController {
                 .build();
 
         com.salonbooking.entity.Service saved = serviceRepository.save(service);
-        return new ResponseEntity<>(DtoMapper::toDto(saved), HttpStatus.CREATED);
+        return new ResponseEntity<>(DtoMapper.toDto(saved), HttpStatus.CREATED);
     }
 
     @GetMapping("/appointments")
